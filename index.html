@@ -175,98 +175,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="FIFO简单介绍"><a href="#FIFO简单介绍" class="headerlink" title="FIFO简单介绍"></a>FIFO简单介绍</h2><p>FIFO(First In First Out)是一种常见的数据缓存器，其特点为数据在写时钟下顺序写入，先写入的数据在前，后写入的数据在后，当读时钟到来时，先读出先写入的数据，后读出后写入的数据，顺序与写入顺序一致。常用场景为在不同时钟域的不同模块间进行数据传输时，避免数据的丢失。对于FIFO的读写时钟的不同可将FIFO分为同步FIFO和异步FIFO，同步FIFO指FIFO的读写时钟为同一时钟，读写操作在时钟到来时同步发生；异步FIFO指FIFO的读写时钟不一致，FIFO的读写操作相互独立。<br>异步FIFO的深度和宽度的区别：FIFO宽度（WIDTH）是指在进行一次读写操作时，写入或读出数据的数据位，而FIFO深度（DEPTH）是指当前设计的FIFO可以存储多少个WIDTH位宽的数据。例如FIFO宽度为16，深度为24，即此FIFO在写满的情况下可以存储24个16位的数据<br>FIFO突发长度（Brust Length）是指一串需要进行连续传输的数据，在此指FIFO需要传输数据的长度。<br>由于异步FIFO的应用较为广泛，在此以异步FIFO来分析下在不同情况下FIFO的最小深度计算。</p>
-<hr>
-<p>###情况1：写时钟频率(<em>f<sub>a</sub></em>)&gt;读时钟频率(<em>f<sub>b</sub></em>)；读写时钟之间无空闲时钟<br>假设：</p>
-<ul>
-<li><em>f<sub>a</sub></em>=80MHz；<em>f<sub>b</sub></em>=50MHz；Brust Length=120</li>
-</ul>
-<p>计算过程： </p>
-<ul>
-<li>写入一个数据需要时间：1/80MHz=12.5ns</li>
-<li>写入突发长度数据所需时间：120×12.5ns=1500ns</li>
-<li>读出一个数据所需时间：1/50MHz=20ns</li>
-<li>在写入突发长度时可读出数据个数：1500ns/20ns=75</li>
-<li>剩余未读出数据个数：120-75=45</li>
-<li>FIFO最小深度为45</li>
-</ul>
-<hr>
-<p>###情况2：写时钟频率(<em>f<sub>a</sub></em>)&gt;读时钟频率(<em>f<sub>b</sub></em>)；读和写时钟之间都存在空闲时钟<br>假设：</p>
-<ul>
-<li><em>f<sub>a</sub></em>=80MHz；<em>f<sub>b</sub></em>=50MHz；Brust Length=120</li>
-<li>两个写数据之间空闲时钟=1</li>
-<li>两个读数据之间空闲时钟=3</li>
-</ul>
-<p>计算过程： </p>
-<ul>
-<li>写入一个数据需要时间：2×（1/80MHz）=25ns</li>
-<li>写入突发长度数据所需时间：120×25ns=3000ns</li>
-<li>读出一个数据所需时间：4×（1/50MHz）=80ns</li>
-<li>在写入突发长度时可读出数据个数：3000ns/80ns=37.5≈37</li>
-<li>剩余未读出数据个数：120-37=83</li>
-<li>FIFO最小深度为83</li>
-<li>两个写数据之间空闲时钟为1可理解为每2个写时钟才写入一个数据</li>
-<li>两个读数据之间空闲时钟为3可理解为每4个写时钟才读出一个数据</li>
-<li>同样的情况出现在给定写使能和读使能信号占空比的情况（假定高电平使能），与上述情况相同的设定为写使能信号的占空比为50%，读使能信号的占空比为25%</li>
-</ul>
-<hr>
-<p>###情况3：写时钟频率(<em>f<sub>a</sub></em>)&lt;读时钟频率(<em>f<sub>b</sub></em>)；读写时钟之间无空闲时钟<br>假设：</p>
-<ul>
-<li><em>f<sub>a</sub></em>=30MHz；<em>f<sub>b</sub></em>=50MHz；Brust Length=120</li>
-</ul>
-<p>计算过程： </p>
-<ul>
-<li>这种情况下无需考虑FIFO深度，因为读时钟比写时钟快，所以FIFO不会出现写满导致数据丢失的情况</li>
-<li>FIFO的最小深度为1</li>
-</ul>
-<hr>
-<p>###情况4：写时钟频率(<em>f<sub>a</sub></em>)&lt;读时钟频率(<em>f<sub>b</sub></em>)；读和写时钟之间都存在空闲时钟（同样适用于读写使能信号存在占空比的情况）<br>假设：</p>
-<ul>
-<li><em>f<sub>a</sub></em>=30MHz；<em>f<sub>b</sub></em>=50MHz；Brust Length=120</li>
-<li>两个写数据之间空闲时钟=1</li>
-<li>两个读数据之间空闲时钟=3</li>
-</ul>
-<p>计算过程： </p>
-<ul>
-<li>写入一个数据需要时间：2×（1/30MHz）=66.667ns</li>
-<li>写入突发长度数据所需时间：120×66.667ns=8000ns</li>
-<li>读出一个数据所需时间：4×（1/50MHz）=80ns</li>
-<li>在写入突发长度时可读出数据个数：8000ns/80ns=100</li>
-<li>剩余未读出数据个数：120-100=20</li>
-<li>FIFO最小深度为20</li>
-</ul>
-<hr>
-<p>###情况5：写时钟频率(<em>f<sub>a</sub></em>)=读时钟频率(<em>f<sub>b</sub></em>)；读和写时钟之间都存在空闲时钟<br>假设：</p>
-<ul>
-<li><em>f<sub>a</sub></em>=50MHz；<em>f<sub>b</sub></em>=50MHz；Brust Length=120</li>
-<li>两个写数据之间空闲时钟=1</li>
-<li>两个读数据之间空闲时钟=3</li>
-</ul>
-<p>计算过程： </p>
-<ul>
-<li>写入一个数据需要时间：2×（1/50MHz）=40ns</li>
-<li>写入突发长度数据所需时间：120×40ns=4800ns</li>
-<li>读出一个数据所需时间：4×（1/50MHz）=80ns</li>
-<li>在写入突发长度时可读出数据个数：480000ns/80ns=60</li>
-<li>剩余未读出数据个数：120-60=60</li>
-<li>FIFO最小深度为60</li>
-<li>当读写时钟频率一致且读写时钟之间不存在空闲时钟时，FIFO最小深度为1</li>
-</ul>
-<hr>
-<p>###情况6：常用计算公式<br>假设：</p>
-<ul>
-<li>写时钟频率<em>f<sub>w</sub></em></li>
-<li>读时钟频率<em>f<sub>r</sub></em></li>
-<li>Brust Length</li>
-<li>每B个写时钟周期写入A个数据</li>
-<li>每Y个读时钟周期读出X个数据</li>
-</ul>
-<p>计算公式为：<br>FIFO_DEPTH=Brust_Length（1-（X/Y)×（<em>f<sub>r</sub></em>/<em>f<sub>w</sub></em>））</p>
-<ul>
-<li>注意考虑背靠背传输的问题，即Brust Length最大化</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/SpringChow/SpringChow.github.io/master/img/FIFO.PNG" alt=""></p>
-
+        <p>介绍异步FIFO最小深度计算</p>
+        
+          <a class="article-more-a" href="/2020/04/23/FIFO%E6%B7%B1%E5%BA%A6%E8%AE%A1%E7%AE%97/#more">more >></a>
+        
       
 
       

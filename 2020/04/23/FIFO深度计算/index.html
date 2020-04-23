@@ -8,16 +8,16 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>FIFO深度计算 | SpringChow&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="FIFO简单介绍FIFO(First In First Out)是一种常见的数据缓存器，其特点为数据在写时钟下顺序写入，先写入的数据在前，后写入的数据在后，当读时钟到来时，先读出先写入的数据，后读出后写入的数据，顺序与写入顺序一致。常用场景为在不同时钟域的不同模块间进行数据传输时，避免数据的丢失。对于FIFO的读写时钟的不同可将FIFO分为同步FIFO和异步FIFO，同步FIFO指FIFO的读写时">
+  <meta name="description" content="介绍异步FIFO最小深度计算">
 <meta property="og:type" content="article">
 <meta property="og:title" content="FIFO深度计算">
 <meta property="og:url" content="http://yoursite.com/2020/04/23/FIFO%E6%B7%B1%E5%BA%A6%E8%AE%A1%E7%AE%97/index.html">
 <meta property="og:site_name" content="SpringChow&#39;s blog">
-<meta property="og:description" content="FIFO简单介绍FIFO(First In First Out)是一种常见的数据缓存器，其特点为数据在写时钟下顺序写入，先写入的数据在前，后写入的数据在后，当读时钟到来时，先读出先写入的数据，后读出后写入的数据，顺序与写入顺序一致。常用场景为在不同时钟域的不同模块间进行数据传输时，避免数据的丢失。对于FIFO的读写时钟的不同可将FIFO分为同步FIFO和异步FIFO，同步FIFO指FIFO的读写时">
+<meta property="og:description" content="介绍异步FIFO最小深度计算">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/SpringChow/SpringChow.github.io/master/img/FIFO.PNG">
 <meta property="article:published_time" content="2020-04-23T04:04:48.000Z">
-<meta property="article:modified_time" content="2020-04-23T04:05:53.248Z">
+<meta property="article:modified_time" content="2020-04-23T04:27:54.110Z">
 <meta property="article:author" content="SpringChow">
 <meta property="article:tag" content="FIFO">
 <meta name="twitter:card" content="summary">
@@ -175,7 +175,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="FIFO简单介绍"><a href="#FIFO简单介绍" class="headerlink" title="FIFO简单介绍"></a>FIFO简单介绍</h2><p>FIFO(First In First Out)是一种常见的数据缓存器，其特点为数据在写时钟下顺序写入，先写入的数据在前，后写入的数据在后，当读时钟到来时，先读出先写入的数据，后读出后写入的数据，顺序与写入顺序一致。常用场景为在不同时钟域的不同模块间进行数据传输时，避免数据的丢失。对于FIFO的读写时钟的不同可将FIFO分为同步FIFO和异步FIFO，同步FIFO指FIFO的读写时钟为同一时钟，读写操作在时钟到来时同步发生；异步FIFO指FIFO的读写时钟不一致，FIFO的读写操作相互独立。<br>异步FIFO的深度和宽度的区别：FIFO宽度（WIDTH）是指在进行一次读写操作时，写入或读出数据的数据位，而FIFO深度（DEPTH）是指当前设计的FIFO可以存储多少个WIDTH位宽的数据。例如FIFO宽度为16，深度为24，即此FIFO在写满的情况下可以存储24个16位的数据<br>FIFO突发长度（Brust Length）是指一串需要进行连续传输的数据，在此指FIFO需要传输数据的长度。<br>由于异步FIFO的应用较为广泛，在此以异步FIFO来分析下在不同情况下FIFO的最小深度计算。</p>
+        <p>介绍异步FIFO最小深度计算</p>
+<a id="more"></a>
+<h2 id="FIFO简单介绍"><a href="#FIFO简单介绍" class="headerlink" title="FIFO简单介绍"></a>FIFO简单介绍</h2><p>FIFO(First In First Out)是一种常见的数据缓存器，其特点为数据在写时钟下顺序写入，先写入的数据在前，后写入的数据在后，当读时钟到来时，先读出先写入的数据，后读出后写入的数据，顺序与写入顺序一致。常用场景为在不同时钟域的不同模块间进行数据传输时，避免数据的丢失。对于FIFO的读写时钟的不同可将FIFO分为同步FIFO和异步FIFO，同步FIFO指FIFO的读写时钟为同一时钟，读写操作在时钟到来时同步发生；异步FIFO指FIFO的读写时钟不一致，FIFO的读写操作相互独立。<br>异步FIFO的深度和宽度的区别：FIFO宽度（WIDTH）是指在进行一次读写操作时，写入或读出数据的数据位，而FIFO深度（DEPTH）是指当前设计的FIFO可以存储多少个WIDTH位宽的数据。例如FIFO宽度为16，深度为24，即此FIFO在写满的情况下可以存储24个16位的数据<br>FIFO突发长度（Brust Length）是指一串需要进行连续传输的数据，在此指FIFO需要传输数据的长度。<br>由于异步FIFO的应用较为广泛，在此以异步FIFO来分析下在不同情况下FIFO的最小深度计算。</p>
 <hr>
 <p>###情况1：写时钟频率(<em>f<sub>a</sub></em>)&gt;读时钟频率(<em>f<sub>b</sub></em>)；读写时钟之间无空闲时钟<br>假设：</p>
 <ul>
@@ -266,6 +268,7 @@
 <li>注意考虑背靠背传输的问题，即Brust Length最大化</li>
 </ul>
 <p><img src="https://raw.githubusercontent.com/SpringChow/SpringChow.github.io/master/img/FIFO.PNG" alt=""></p>
+<p>注：参考资料来自Putta Satish</p>
 
       
 
