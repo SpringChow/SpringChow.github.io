@@ -17,7 +17,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://raw.githubusercontent.com/SpringChow/SpringChow.github.io/master/img/FIFO.PNG">
 <meta property="article:published_time" content="2020-04-23T04:04:48.000Z">
-<meta property="article:modified_time" content="2020-04-23T04:27:54.110Z">
+<meta property="article:modified_time" content="2020-04-23T04:44:55.948Z">
 <meta property="article:author" content="SpringChow">
 <meta property="article:tag" content="FIFO">
 <meta name="twitter:card" content="summary">
@@ -179,7 +179,7 @@
 <a id="more"></a>
 <h2 id="FIFO简单介绍"><a href="#FIFO简单介绍" class="headerlink" title="FIFO简单介绍"></a>FIFO简单介绍</h2><p>FIFO(First In First Out)是一种常见的数据缓存器，其特点为数据在写时钟下顺序写入，先写入的数据在前，后写入的数据在后，当读时钟到来时，先读出先写入的数据，后读出后写入的数据，顺序与写入顺序一致。常用场景为在不同时钟域的不同模块间进行数据传输时，避免数据的丢失。对于FIFO的读写时钟的不同可将FIFO分为同步FIFO和异步FIFO，同步FIFO指FIFO的读写时钟为同一时钟，读写操作在时钟到来时同步发生；异步FIFO指FIFO的读写时钟不一致，FIFO的读写操作相互独立。<br>异步FIFO的深度和宽度的区别：FIFO宽度（WIDTH）是指在进行一次读写操作时，写入或读出数据的数据位，而FIFO深度（DEPTH）是指当前设计的FIFO可以存储多少个WIDTH位宽的数据。例如FIFO宽度为16，深度为24，即此FIFO在写满的情况下可以存储24个16位的数据<br>FIFO突发长度（Brust Length）是指一串需要进行连续传输的数据，在此指FIFO需要传输数据的长度。<br>由于异步FIFO的应用较为广泛，在此以异步FIFO来分析下在不同情况下FIFO的最小深度计算。</p>
 <hr>
-<p>###情况1：写时钟频率(<em>f<sub>a</sub></em>)&gt;读时钟频率(<em>f<sub>b</sub></em>)；读写时钟之间无空闲时钟<br>假设：</p>
+<h3 id="情况1：写时钟频率-fa-gt-读时钟频率-fb-；读写时钟之间无空闲时钟"><a href="#情况1：写时钟频率-fa-gt-读时钟频率-fb-；读写时钟之间无空闲时钟" class="headerlink" title="情况1：写时钟频率(fa)&gt;读时钟频率(fb)；读写时钟之间无空闲时钟"></a>情况1：写时钟频率(<em>f<sub>a</sub></em>)&gt;读时钟频率(<em>f<sub>b</sub></em>)；读写时钟之间无空闲时钟</h3><p>假设：</p>
 <ul>
 <li><em>f<sub>a</sub></em>=80MHz；<em>f<sub>b</sub></em>=50MHz；Brust Length=120</li>
 </ul>
@@ -193,7 +193,7 @@
 <li>FIFO最小深度为45</li>
 </ul>
 <hr>
-<p>###情况2：写时钟频率(<em>f<sub>a</sub></em>)&gt;读时钟频率(<em>f<sub>b</sub></em>)；读和写时钟之间都存在空闲时钟<br>假设：</p>
+<h3 id="情况2：写时钟频率-fa-gt-读时钟频率-fb-；读和写时钟之间都存在空闲时钟"><a href="#情况2：写时钟频率-fa-gt-读时钟频率-fb-；读和写时钟之间都存在空闲时钟" class="headerlink" title="情况2：写时钟频率(fa)&gt;读时钟频率(fb)；读和写时钟之间都存在空闲时钟"></a>情况2：写时钟频率(<em>f<sub>a</sub></em>)&gt;读时钟频率(<em>f<sub>b</sub></em>)；读和写时钟之间都存在空闲时钟</h3><p>假设：</p>
 <ul>
 <li><em>f<sub>a</sub></em>=80MHz；<em>f<sub>b</sub></em>=50MHz；Brust Length=120</li>
 <li>两个写数据之间空闲时钟=1</li>
@@ -212,7 +212,7 @@
 <li>同样的情况出现在给定写使能和读使能信号占空比的情况（假定高电平使能），与上述情况相同的设定为写使能信号的占空比为50%，读使能信号的占空比为25%</li>
 </ul>
 <hr>
-<p>###情况3：写时钟频率(<em>f<sub>a</sub></em>)&lt;读时钟频率(<em>f<sub>b</sub></em>)；读写时钟之间无空闲时钟<br>假设：</p>
+<h3 id="情况3：写时钟频率-fa-lt-读时钟频率-fb-；读写时钟之间无空闲时钟"><a href="#情况3：写时钟频率-fa-lt-读时钟频率-fb-；读写时钟之间无空闲时钟" class="headerlink" title="情况3：写时钟频率(fa)&lt;读时钟频率(fb)；读写时钟之间无空闲时钟"></a>情况3：写时钟频率(<em>f<sub>a</sub></em>)&lt;读时钟频率(<em>f<sub>b</sub></em>)；读写时钟之间无空闲时钟</h3><p>假设：</p>
 <ul>
 <li><em>f<sub>a</sub></em>=30MHz；<em>f<sub>b</sub></em>=50MHz；Brust Length=120</li>
 </ul>
@@ -222,7 +222,7 @@
 <li>FIFO的最小深度为1</li>
 </ul>
 <hr>
-<p>###情况4：写时钟频率(<em>f<sub>a</sub></em>)&lt;读时钟频率(<em>f<sub>b</sub></em>)；读和写时钟之间都存在空闲时钟（同样适用于读写使能信号存在占空比的情况）<br>假设：</p>
+<h3 id="情况4：写时钟频率-fa-lt-读时钟频率-fb-；读和写时钟之间都存在空闲时钟（同样适用于读写使能信号存在占空比的情况）"><a href="#情况4：写时钟频率-fa-lt-读时钟频率-fb-；读和写时钟之间都存在空闲时钟（同样适用于读写使能信号存在占空比的情况）" class="headerlink" title="情况4：写时钟频率(fa)&lt;读时钟频率(fb)；读和写时钟之间都存在空闲时钟（同样适用于读写使能信号存在占空比的情况）"></a>情况4：写时钟频率(<em>f<sub>a</sub></em>)&lt;读时钟频率(<em>f<sub>b</sub></em>)；读和写时钟之间都存在空闲时钟（同样适用于读写使能信号存在占空比的情况）</h3><p>假设：</p>
 <ul>
 <li><em>f<sub>a</sub></em>=30MHz；<em>f<sub>b</sub></em>=50MHz；Brust Length=120</li>
 <li>两个写数据之间空闲时钟=1</li>
@@ -238,7 +238,7 @@
 <li>FIFO最小深度为20</li>
 </ul>
 <hr>
-<p>###情况5：写时钟频率(<em>f<sub>a</sub></em>)=读时钟频率(<em>f<sub>b</sub></em>)；读和写时钟之间都存在空闲时钟<br>假设：</p>
+<h3 id="情况5：写时钟频率-fa-读时钟频率-fb-；读和写时钟之间都存在空闲时钟"><a href="#情况5：写时钟频率-fa-读时钟频率-fb-；读和写时钟之间都存在空闲时钟" class="headerlink" title="情况5：写时钟频率(fa)=读时钟频率(fb)；读和写时钟之间都存在空闲时钟"></a>情况5：写时钟频率(<em>f<sub>a</sub></em>)=读时钟频率(<em>f<sub>b</sub></em>)；读和写时钟之间都存在空闲时钟</h3><p>假设：</p>
 <ul>
 <li><em>f<sub>a</sub></em>=50MHz；<em>f<sub>b</sub></em>=50MHz；Brust Length=120</li>
 <li>两个写数据之间空闲时钟=1</li>
@@ -255,7 +255,7 @@
 <li>当读写时钟频率一致且读写时钟之间不存在空闲时钟时，FIFO最小深度为1</li>
 </ul>
 <hr>
-<p>###情况6：常用计算公式<br>假设：</p>
+<h3 id="情况6：常用计算公式"><a href="#情况6：常用计算公式" class="headerlink" title="情况6：常用计算公式"></a>情况6：常用计算公式</h3><p>假设：</p>
 <ul>
 <li>写时钟频率<em>f<sub>w</sub></em></li>
 <li>读时钟频率<em>f<sub>r</sub></em></li>
